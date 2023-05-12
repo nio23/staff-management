@@ -147,6 +147,10 @@
     <Compile Include="Migrations\202305112034244_init.designer.cs">
       <DependentUpon>202305112034244_init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202305112122535_PopulateSkillsTable.cs" />
+    <Compile Include="Migrations\202305112122535_PopulateSkillsTable.designer.cs">
+      <DependentUpon>202305112122535_PopulateSkillsTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\Employee.cs" />
@@ -189,8 +193,8 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Skill\AllSkills.cshtml" />
     <Content Include="Views\Employees\AllEmployees.cshtml" />
+    <Content Include="Views\Skill\ShowSkillsView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -211,6 +215,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202305112034244_init.resx">
       <DependentUpon>202305112034244_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305112122535_PopulateSkillsTable.resx">
+      <DependentUpon>202305112122535_PopulateSkillsTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
