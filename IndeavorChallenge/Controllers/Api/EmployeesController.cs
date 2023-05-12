@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using AutoMapper;
+using IndeavorChallenge.Dtos;
 using IndeavorChallenge.Models;
 
 namespace IndeavorChallenge.Controllers.Api
@@ -25,38 +27,42 @@ namespace IndeavorChallenge.Controllers.Api
 
 
         //GET /api/employees
-        public IEnumerable<Employee> GetEmployees()
+        public IEnumerable<EmployeeDto> GetEmployees()
         {
-            return m_context.Employees.ToList();
+            return m_context.Employees.ToList().Select(Mapper.Map<Employee,EmployeeDto>);
         }
 
         //GET /api/employees/1
-        public Employee GetEmployee(int id)
+        public EmployeeDto GetEmployee(int id)
         {
             var employee = m_context.Employees.SingleOrDefault(x => x.id == id);
 
             if (employee == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return employee;
+            return Mapper.Map<Employee,EmployeeDto>(employee);
         }
 
         //POST /api/employees
         [HttpPost]
-        public Employee CreateEmployee(Employee employee)
+        public Employee CreateEmployee(EmployeeDto employeeDto)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
+            var employee = Mapper.Map<EmployeeDto, Employee>(employeeDto);
+
             m_context.Employees.Add(employee);
             m_context.SaveChanges();
+
+            employeeDto.id = employee.id;
 
             return employee;
         }
 
         //PUT /api/employees/1
         [HttpPut]
-        public void UpdateEmployee(int id, Employee employee)
+        public void UpdateEmployee(int id, EmployeeDto employeeDto)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
@@ -66,10 +72,7 @@ namespace IndeavorChallenge.Controllers.Api
             if (dbEmployee == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            dbEmployee.name = employee.name;
-            dbEmployee.skills = employee.skills;
-            dbEmployee.hiringDate = employee.hiringDate;
-            dbEmployee.surname = employee.surname;
+            Mapper.Map<EmployeeDto, Employee>(employeeDto, dbEmployee);
 
             m_context.SaveChanges();
         }

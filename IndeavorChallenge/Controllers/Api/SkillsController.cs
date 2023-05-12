@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Web.Http;
 using System.Web.UI.WebControls;
+using AutoMapper;
+using IndeavorChallenge.Dtos;
 using IndeavorChallenge.Models;
 
 namespace IndeavorChallenge.Controllers.Api
@@ -25,38 +27,42 @@ namespace IndeavorChallenge.Controllers.Api
         }
 
         //GET /api/skills
-        public IEnumerable<Skill> GetSkills()
+        public IEnumerable<SkillDto> GetSkills()
         {
-            return m_context.Skills.ToList();
+            return m_context.Skills.ToList().Select(Mapper.Map<Skill, SkillDto>);
         }
 
         //GET /api/skill/1
-        public Skill GetSkill(int id)
+        public SkillDto GetSkill(int id)
         {
             var skill = m_context.Skills.SingleOrDefault(x=>x.id == id);
 
             if (skill == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return skill;
+            return Mapper.Map<Skill, SkillDto>(skill);
         }
 
         //POST /api/skills
         [HttpPost]
-        public Skill CreateSkill(Skill skill)
+        public SkillDto CreateSkill(SkillDto skillDto)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
+            var skill = Mapper.Map<SkillDto, Skill>(skillDto);
+
             m_context.Skills.Add(skill);
             m_context.SaveChanges();
 
-            return skill;
+            skillDto.id = skill.id;
+
+            return skillDto;
         }
 
         //PUT /api/skills/1
         [HttpPut]
-        public void UpdateSkill(int id,  Skill skill)
+        public void UpdateSkill(int id,  SkillDto skillDto)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
@@ -66,8 +72,7 @@ namespace IndeavorChallenge.Controllers.Api
             if (dbSkill == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            dbSkill.name = skill.name;
-            dbSkill.dateCreated = DateTime.Now;
+            Mapper.Map<SkillDto, Skill>(skillDto, dbSkill);
 
             m_context.SaveChanges();
 
