@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Runtime.InteropServices;
 using System.Web.Http;
-using System.Web.UI.WebControls;
 using AutoMapper;
 using IndeavorChallenge.Dtos;
 using IndeavorChallenge.Models;
@@ -27,28 +23,29 @@ namespace IndeavorChallenge.Controllers.Api
         }
 
         //GET /api/skills
-        public IEnumerable<SkillDto> GetSkills()
+        [HttpGet]
+        public IHttpActionResult GetSkills()
         {
-            return m_context.Skills.ToList().Select(Mapper.Map<Skill, SkillDto>);
+            return Ok(m_context.Skills.Select(Mapper.Map<Skill, SkillDto>));
         }
 
-        //GET /api/skill/1
-        public SkillDto GetSkill(int id)
+        //GET /api/skills/1
+        public IHttpActionResult GetSkill(int id)
         {
             var skill = m_context.Skills.SingleOrDefault(x=>x.id == id);
 
             if (skill == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
 
-            return Mapper.Map<Skill, SkillDto>(skill);
+            return Ok(Mapper.Map<Skill, SkillDto>(skill));
         }
 
         //POST /api/skills
         [HttpPost]
-        public SkillDto CreateSkill(SkillDto skillDto)
+        public IHttpActionResult CreateSkill(SkillDto skillDto)
         {
             if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return BadRequest();
 
             var skill = Mapper.Map<SkillDto, Skill>(skillDto);
 
@@ -57,38 +54,41 @@ namespace IndeavorChallenge.Controllers.Api
 
             skillDto.id = skill.id;
 
-            return skillDto;
+            return Created(new Uri(Request.RequestUri + "/"+skill.id), skillDto);
         }
 
         //PUT /api/skills/1
         [HttpPut]
-        public void UpdateSkill(int id,  SkillDto skillDto)
+        public IHttpActionResult UpdateSkill(int id,  SkillDto skillDto)
         {
             if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return BadRequest();
 
-            var dbSkill = m_context.Skills.SingleOrDefault(x => x.id == id);
-
+            var dbSkill = m_context.Skills.SingleOrDefault(x=>x.id == id);
             if (dbSkill == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
 
             Mapper.Map<SkillDto, Skill>(skillDto, dbSkill);
 
             m_context.SaveChanges();
+            
+            return Ok();
 
         }
 
         //DELETE /api/skills/1
         [HttpDelete]
-        public void DeleteSkill(int id)
+        public IHttpActionResult DeleteSkill(int id)
         {
             var skill = m_context.Skills.SingleOrDefault(x=>x.id == id);
 
             if (skill == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
 
             m_context.Skills.Remove(skill);
             m_context.SaveChanges();
+
+            return Ok();
         }
 
     }
