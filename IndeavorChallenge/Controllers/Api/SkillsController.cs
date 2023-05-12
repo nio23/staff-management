@@ -74,6 +74,7 @@ namespace IndeavorChallenge.Controllers.Api
         }
 
         //DELETE /api/skills/1
+        [HttpDelete]
         public void DeleteSkill(int id)
         {
             var skill = m_context.Skills.SingleOrDefault(x=>x.id == id);
