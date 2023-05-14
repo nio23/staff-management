@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Results;
 using AutoMapper;
 using IndeavorChallenge.Dtos;
 using IndeavorChallenge.Models;

@@ -1,0 +1,60 @@
+﻿
+@model IEnumerable<IndeavorChallenge.Models.Skill>
+@{
+	ViewBag.Title = "Skills";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Skills</h2>
+<table id="skills" class="table table-bordered table-hover">
+	<thead>
+		<tr>
+			<th>Skill</th>
+			<th>Date Created</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var skill in Model)
+		{
+			<tr>
+
+				<td>@Html.ActionLink(skill.name, "Detail", "Skills", new{id = skill.id}, null)</td>
+				<td>@skill.dateCreated</td>
+				<td>
+					<button data-skill-id="@skill.id" class="btn-link js-delete">Delete</button>
+				</td>
+
+			</tr>
+
+		}
+	</tbody>
+</table>
+
+@section scripts
+{
+	<script>
+		$(document).ready(function () {
+			$("#skills").on("click" ,".js-delete", function () {
+				var button = $(this);
+				if (confirm("Delete skill?")) {
+					//console.log("CONFIRMED");
+					$.ajax({
+						url: "/api/skills/" + button.attr("data-skill-id"),
+						method: "DELETE",
+						success: function () {
+							button.parents("tr").remove();
+							
+						}
+					});
+				}
+
+
+			});
+		});
+
+	
+
+
+</script>
+}
+
