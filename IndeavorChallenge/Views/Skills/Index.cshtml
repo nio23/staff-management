@@ -18,43 +18,11 @@
 		{
 			<tr>
 
-				<td>@Html.ActionLink(skill.name, "Detail", "Skills", new{id = skill.id}, null)</td>
-				<td>@skill.dateCreated</td>
-				<td>
-					<button data-skill-id="@skill.id" class="btn-link js-delete">Delete</button>
-				</td>
-
+				<td>@Html.ActionLink(skill.name, "Edit", "Skills", new{id = skill.id}, null)</td>
+				<td>@skill.dateCreated.ToShortDateString()</td>
 			</tr>
 
 		}
 	</tbody>
 </table>
-
-@section scripts
-{
-	<script>
-		$(document).ready(function () {
-			$("#skills").on("click" ,".js-delete", function () {
-				var button = $(this);
-				if (confirm("Delete skill?")) {
-					//console.log("CONFIRMED");
-					$.ajax({
-						url: "/api/skills/" + button.attr("data-skill-id"),
-						method: "DELETE",
-						success: function () {
-							button.parents("tr").remove();
-							
-						}
-					});
-				}
-
-
-			});
-		});
-
-	
-
-
-</script>
-}
 

@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace IndeavorChallenge.Controllers
 {
-    public class HomeController : Controller
+    public class EmployeesController : Controller
     {
         public ActionResult Index()
         {

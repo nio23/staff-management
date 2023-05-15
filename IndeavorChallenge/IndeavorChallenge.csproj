@@ -143,7 +143,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Api\EmployeesController.cs" />
     <Compile Include="Controllers\Api\SkillsController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\SkillsController.cs" />
     <Compile Include="Dtos\EmployeeDto.cs" />
     <Compile Include="Dtos\SkillDto.cs" />
@@ -157,6 +157,10 @@
     <Compile Include="Migrations\202305112122535_PopulateSkillsTable.cs" />
     <Compile Include="Migrations\202305112122535_PopulateSkillsTable.designer.cs">
       <DependentUpon>202305112122535_PopulateSkillsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305141932277_AddDescriptionToSkill.cs" />
+    <Compile Include="Migrations\202305141932277_AddDescriptionToSkill.designer.cs">
+      <DependentUpon>202305141932277_AddDescriptionToSkill.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -411,9 +415,10 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Employees\AllEmployees.cshtml" />
+    <Content Include="Views\Employees\Index.cshtml" />
     <Content Include="Views\Skills\Index.cshtml" />
     <Content Include="Views\Skills\Detail.cshtml" />
+    <Content Include="Views\Skills\New.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -429,6 +434,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202305112122535_PopulateSkillsTable.resx">
       <DependentUpon>202305112122535_PopulateSkillsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305141932277_AddDescriptionToSkill.resx">
+      <DependentUpon>202305141932277_AddDescriptionToSkill.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

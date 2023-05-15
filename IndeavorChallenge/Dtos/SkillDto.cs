@@ -10,5 +10,6 @@ namespace IndeavorChallenge.Dtos
         public int id { get; set; }
         public string name { get; set; }
         public DateTime dateCreated { get; set; }
+        public string description { get; set; }
     }
 } 

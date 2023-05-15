@@ -1,0 +1,27 @@
+﻿@model  IEnumerable<IndeavorChallenge.Models.Employee>
+@{
+    ViewBag.Title = "AllEmployees";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>All Employees</h2>
+@if (Model != null)
+{
+	<table id="skills" class="table table-bordered table-hover">
+		<thead>
+		<tr>
+			<th>Full Name</th>
+		</tr>
+		</thead>
+		<tbody>
+		@foreach (var e in Model)
+		{
+			<tr>
+				<td>@Html.ActionLink(string.Join(" ", e.surname, e.name), "Edit", "Skills", new { id = e.id }, null)</td>
+			</tr>
+
+		}
+		</tbody>
+	</table>
+}
+
