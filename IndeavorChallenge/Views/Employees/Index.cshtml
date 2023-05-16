@@ -7,7 +7,7 @@
 <h2>All Employees</h2>
 @if (Model != null)
 {
-	<table id="skills" class="table table-bordered table-hover">
+	<table id="employees" class="table table-bordered table-hover">
 		<thead>
 		<tr>
 			<th>Full Name</th>
@@ -23,5 +23,16 @@
 		}
 		</tbody>
 	</table>
+}
+
+@section scripts
+{
+	<script>
+		$(document).ready(function () {
+			$("#employees").DataTable();
+		});
+
+		
+	</script>
 }
 

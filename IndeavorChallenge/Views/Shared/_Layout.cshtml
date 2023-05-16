@@ -8,33 +8,36 @@
 	@Scripts.Render("~/bundles/modernizr")
 </head>
 <body style="padding-top: 0;">
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<div class="container">
-			@Html.ActionLink("Application name", "Index", "Skills", new { area = "" }, new { @class = "navbar-brand" })
-			<button type="button" class="navbar-toggler" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<div class="collapse navbar-collapse">
-				<ul class="navbar-nav">
-					<li>@Html.ActionLink("Skills", "Index", "Skills",null, new {@class="nav-link"})</li>
-					<li>@Html.ActionLink("New Skill", "New", "Skills",null, new { @class = "nav-link" })</li>
-					<li>@Html.ActionLink("Employees", "Index", "Employees",null, new { @class = "nav-link" })</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-	<div class="container body-content">
-		@RenderBody()
-		<hr />
-		<footer>
-			<p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-		</footer>
-	</div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            @Html.ActionLink("Application name", "Index", "Skills", new { area = "" }, new { @class = "navbar-brand" })
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li>@Html.ActionLink("Skills", "Index", "Skills", null, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("New Skill", "New", "Skills", null, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Employees", "Index", "Employees", null, new { @class = "nav-link" })</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
 
-	@Scripts.Render("~/bundles/jquery")
-	@Scripts.Render("~/bundles/bootstrap")
-	@RenderSection("scripts", required: false)
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/lib")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @RenderSection("scripts", required: false)
 </body>
 </html>
