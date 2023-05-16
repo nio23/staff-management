@@ -3,28 +3,64 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using AutoMapper;
+using IndeavorChallenge.Models;
 
 namespace IndeavorChallenge.Controllers
 {
     public class EmployeesController : Controller
     {
+        private ApplicationDbContext m_context;
+
+        public EmployeesController()
+        {
+            m_context = new ApplicationDbContext();
+        }
+
         public ActionResult Index()
         {
-            return View();
+            var employees = m_context.Employees.ToList();
+            return View(employees);
         }
 
-        public ActionResult About()
+        public ActionResult Edit(int id)
         {
-            ViewBag.Message = "Your application description page.";
+            var empl = m_context.Employees.SingleOrDefault(x => x.id == id);
+            if (empl == null)
+                return HttpNotFound();
 
-            return View();
+            return View("New",empl);
         }
 
-        public ActionResult Contact()
+        public ActionResult New()
         {
-            ViewBag.Message = "Your contact page.";
+            var emp = new Employee();
 
-            return View();
+            return View(emp);
+        }
+
+        [HttpPost]
+        public ActionResult Save(Employee empl)
+        {
+            if (empl.id == 0)
+            {
+                m_context.Employees.Add(empl);
+            }
+            else
+            {
+                var dbempl = m_context.Employees.SingleOrDefault(x => x.id == empl.id);
+
+                dbempl.name = empl.name;
+                dbempl.surname = empl.surname;
+                dbempl.hiringDate = empl.hiringDate;
+                dbempl.skills = empl.skills;
+
+            }
+
+
+            m_context.SaveChanges();
+
+            return RedirectToAction("Index", "Skills");
         }
     }
 }

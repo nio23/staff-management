@@ -11,5 +11,6 @@ namespace IndeavorChallenge.Dtos
         public string name { get; set; }
         public DateTime dateCreated { get; set; }
         public string description { get; set; }
+        public ICollection<EmployeeDto> employees { get; set; }
     }
 } 

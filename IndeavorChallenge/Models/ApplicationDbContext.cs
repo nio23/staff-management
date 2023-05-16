@@ -11,5 +11,9 @@ namespace IndeavorChallenge.Models
         public DbSet<Skill> Skills { get; set; }
         public DbSet<Employee> Employees { get; set; }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

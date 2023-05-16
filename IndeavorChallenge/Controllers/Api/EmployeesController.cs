@@ -27,28 +27,28 @@ namespace IndeavorChallenge.Controllers.Api
 
 
         //GET /api/employees
-        public IEnumerable<EmployeeDto> GetEmployees()
+        public IHttpActionResult GetEmployees()
         {
-            return m_context.Employees.ToList().Select(Mapper.Map<Employee,EmployeeDto>);
+            return Ok( m_context.Employees.ToList().Select(Mapper.Map<Employee,EmployeeDto>));
         }
 
         //GET /api/employees/1
-        public EmployeeDto GetEmployee(int id)
+        public IHttpActionResult GetEmployee(int id)
         {
             var employee = m_context.Employees.SingleOrDefault(x => x.id == id);
 
             if (employee == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
 
-            return Mapper.Map<Employee,EmployeeDto>(employee);
+            return Ok(Mapper.Map<Employee,EmployeeDto>(employee));
         }
 
         //POST /api/employees
         [HttpPost]
-        public Employee CreateEmployee(EmployeeDto employeeDto)
+        public IHttpActionResult CreateEmployee(EmployeeDto employeeDto)
         {
             if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return BadRequest();
 
             var employee = Mapper.Map<EmployeeDto, Employee>(employeeDto);
 
@@ -57,36 +57,37 @@ namespace IndeavorChallenge.Controllers.Api
 
             employeeDto.id = employee.id;
 
-            return employee;
+            return Created(new Uri(Request.RequestUri + "/" + employee.id), employeeDto);
         }
 
         //PUT /api/employees/1
         [HttpPut]
-        public void UpdateEmployee(int id, EmployeeDto employeeDto)
+        public IHttpActionResult UpdateEmployee(int id, EmployeeDto employeeDto)
         {
             if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return BadRequest();
 
             var dbEmployee = m_context.Employees.SingleOrDefault(x => x.id == id);
 
             if (dbEmployee == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
 
             Mapper.Map<EmployeeDto, Employee>(employeeDto, dbEmployee);
 
             m_context.SaveChanges();
+            return Ok();
         }
 
         [HttpDelete]
-        public void DeleteEmployee(int id)
+        public IHttpActionResult DeleteEmployee(int id)
         {
             var employee = m_context.Employees.SingleOrDefault(x => x.id == id);
             if (employee == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-
+                return NotFound();
             m_context.Employees.Remove(employee);
 
             m_context.SaveChanges();
+            return Ok();
         }
     }
 }

@@ -1,0 +1,32 @@
+﻿@model IndeavorChallenge.Models.Employee
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New</h2>
+
+@*BeginForm does not have close tag. Using statement will dispose it when no needed anymore*@
+@using (Html.BeginForm("Save", "Employees"))
+{
+
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.name, new { @class = "text-capitalize" })
+        @Html.TextBoxFor(x => x.name, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.surname, new { @class = "text-capitalize" })
+        @Html.TextAreaFor(x => x.surname, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.hiringDate)
+        @Html.DisplayFor(x => x.hiringDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+    </div>
+
+
+    @Html.HiddenFor(x => x.id)
+    <button type="submit" class="btn btn-primary">Save</button>
+    <button class="btn btn-secondary">Delete</button>
+}
+

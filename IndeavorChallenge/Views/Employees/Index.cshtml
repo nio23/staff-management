@@ -1,7 +1,7 @@
 ﻿@model  IEnumerable<IndeavorChallenge.Models.Employee>
 @{
-    ViewBag.Title = "AllEmployees";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "AllEmployees";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>All Employees</h2>
@@ -17,7 +17,7 @@
 		@foreach (var e in Model)
 		{
 			<tr>
-				<td>@Html.ActionLink(string.Join(" ", e.surname, e.name), "Edit", "Skills", new { id = e.id }, null)</td>
+				<td>@Html.ActionLink(string.Join(" ", e.surname, e.name), "Edit", "Employees", new { id = e.id }, null)</td>
 			</tr>
 
 		}

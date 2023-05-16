@@ -162,6 +162,34 @@
     <Compile Include="Migrations\202305141932277_AddDescriptionToSkill.designer.cs">
       <DependentUpon>202305141932277_AddDescriptionToSkill.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202305151935312_EditedEmployeeToUseForeignKeySkill.cs" />
+    <Compile Include="Migrations\202305151935312_EditedEmployeeToUseForeignKeySkill.designer.cs">
+      <DependentUpon>202305151935312_EditedEmployeeToUseForeignKeySkill.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305151938291_ChangedDataTypeToDate.cs" />
+    <Compile Include="Migrations\202305151938291_ChangedDataTypeToDate.designer.cs">
+      <DependentUpon>202305151938291_ChangedDataTypeToDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305151948116_changedDateCreatedDBSchema.cs" />
+    <Compile Include="Migrations\202305151948116_changedDateCreatedDBSchema.designer.cs">
+      <DependentUpon>202305151948116_changedDateCreatedDBSchema.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305152004350_populateEmployeesTable.cs" />
+    <Compile Include="Migrations\202305152004350_populateEmployeesTable.designer.cs">
+      <DependentUpon>202305152004350_populateEmployeesTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305152054270_changedSkillsIdToCollection.cs" />
+    <Compile Include="Migrations\202305152054270_changedSkillsIdToCollection.designer.cs">
+      <DependentUpon>202305152054270_changedSkillsIdToCollection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305152105038_changedemployeeSkills.cs" />
+    <Compile Include="Migrations\202305152105038_changedemployeeSkills.designer.cs">
+      <DependentUpon>202305152105038_changedemployeeSkills.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305152109152_changedSkillsModelToIncludeEmployeesList.cs" />
+    <Compile Include="Migrations\202305152109152_changedSkillsModelToIncludeEmployeesList.designer.cs">
+      <DependentUpon>202305152109152_changedSkillsModelToIncludeEmployeesList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\Employee.cs" />
@@ -419,6 +447,7 @@
     <Content Include="Views\Skills\Index.cshtml" />
     <Content Include="Views\Skills\Detail.cshtml" />
     <Content Include="Views\Skills\New.cshtml" />
+    <Content Include="Views\Employees\New.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -437,6 +466,27 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202305141932277_AddDescriptionToSkill.resx">
       <DependentUpon>202305141932277_AddDescriptionToSkill.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305151935312_EditedEmployeeToUseForeignKeySkill.resx">
+      <DependentUpon>202305151935312_EditedEmployeeToUseForeignKeySkill.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305151938291_ChangedDataTypeToDate.resx">
+      <DependentUpon>202305151938291_ChangedDataTypeToDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305151948116_changedDateCreatedDBSchema.resx">
+      <DependentUpon>202305151948116_changedDateCreatedDBSchema.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305152004350_populateEmployeesTable.resx">
+      <DependentUpon>202305152004350_populateEmployeesTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305152054270_changedSkillsIdToCollection.resx">
+      <DependentUpon>202305152054270_changedSkillsIdToCollection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305152105038_changedemployeeSkills.resx">
+      <DependentUpon>202305152105038_changedemployeeSkills.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305152109152_changedSkillsModelToIncludeEmployeesList.resx">
+      <DependentUpon>202305152109152_changedSkillsModelToIncludeEmployeesList.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
