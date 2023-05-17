@@ -91,7 +91,29 @@ namespace IndeavorChallenge.Controllers.Api
             return Ok();
         }
 
-        
+        //DELETE /api/employees/employeeSkill/1
+
+        [Route("api/employees/employeeSkill/{id}")]
+        [HttpDelete]
+        public IHttpActionResult DeleteEmployeeSkill(int id)
+        {
+            return Ok();
+        }
+
+        [Route("api/employees/employeeSkill/{id}")]
+        [HttpPut]
+        public IHttpActionResult AddEmployeeSkill(int emplId, int skillId)
+        {
+            var empl = m_context.Employees.Include(x=>x.skills).SingleOrDefault(x => x.id == emplId);
+            var skill = m_context.Skills.Single(x=>x.id == skillId);
+
+            //empl.skills.Where(x => x.id != skillId);
+            empl.skills.Add(skill);
+
+            return Ok();
+
+        }
+
         /*[HttpPut]
         public IHttpActionResult DeleteSkill(int employeeId, int skillId)
         {

@@ -59,20 +59,20 @@ namespace IndeavorChallenge.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(Employee empl)
+        public ActionResult Save(EmployeeViewModel emplViewModel)
         {
-            if (empl.id == 0)
+            if (emplViewModel.employee.id == 0)
             {
-                m_context.Employees.Add(empl);
+                m_context.Employees.Add(emplViewModel.employee);
             }
             else
             {
-                var dbempl = m_context.Employees.SingleOrDefault(x => x.id == empl.id);
+                var dbempl = m_context.Employees.SingleOrDefault(x => x.id == emplViewModel.employee.id);
 
-                dbempl.name = empl.name;
-                dbempl.surname = empl.surname;
-                dbempl.hiringDate = empl.hiringDate;
-                dbempl.skills = empl.skills;
+                dbempl.name = emplViewModel.employee.name;
+                dbempl.surname = emplViewModel.employee.surname;
+                dbempl.hiringDate = emplViewModel.employee.hiringDate;
+                dbempl.skills = emplViewModel.employee.skills;
 
             }
 

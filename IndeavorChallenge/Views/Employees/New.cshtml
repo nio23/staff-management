@@ -36,7 +36,7 @@
 				<div class="form-group">
 					@Html.LabelFor(x=>x.skills)
 					@Html.DropDownListFor(x=>x.skills, new SelectList(Model.skills,"id", "name"), "Select skills", new {@class= "form-control"})
-					<button type="button" class="btn btn-primary mt-3">Add</button>
+					<button id="addNewSkillBtn" type="button" class="btn btn-primary mt-3">Add</button>
 				</div>
 			</div>
 		</div>
@@ -78,15 +78,44 @@
 
 @section scripts
 {
-	<script>
+    <script>
 		$(document).ready(function () {
 
 
 			var table = $("#employeeSkills").DataTable();
 
+			$("#addNewSkillBtn").on("click", function () {
+				var emplId = $('#@Html.IdFor(m => m.employee.id)').val();
+				var button = $(this);
+				var selectedSkill = $("#skills option:selected").val();
+				var selectedSkillName = $('#skills option:selected').text();
+				console.log(selectedSkill);
+                console.log(selectedSkillName);
+
+				//table.row.add(selectedSkillName).draw();
+
+				@*$.ajax({
+                    url: '/api/employees/employeeskill/' + selectedSkill,
+					type: 'PUT',
+					data: {
+						"emplId": emplId,
+						"skillId": selectedSkill
+						},
+					success: function (response) {
+						// Handle success response
+						console.log(response);
+					},
+					error: function (xhr, textStatus, errorThrown) {
+						// Handle error response
+						console.log(xhr.responseText);
+					}
+
+				});*@
+			});
+
             $("#deleteBtn").on("click", function () {
 				var button = $(this);
-				var emplId = $('#@Html.IdFor(m=>m.employee.id)').val();
+				var emplId = $('#@Html.IdFor(m => m.employee.id)').val();
 				console.log(emplId);
                 if (confirm("Delete employee?")) {
                     console.log("CONFIRMED");
@@ -103,20 +132,6 @@
             });
 
 
-			@*table.on('click', '.js-remove-skill', function () {
-				var emplId = $(this).attr("empl-id");
-				var skillId = $(this).attr("empl-skill-id");
-				console.log("SkillId " + skillId);
-				console.log("Employee " + emplId);
-				$1$$.ajax({
-					url: '/api/employees/deleteSkill/',
-					type: 'POST',
-					data: { employeeId: id, skillId: skillId },
-					success: function (result) {
-						console.log("Deleted!");
-					}
-				});#1#
-			});*@
 
 			table.on('click', '.js-remove-skill', function () {
 				var emplId = $(this).attr("empl-id");
