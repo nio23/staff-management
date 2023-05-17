@@ -11,12 +11,20 @@ namespace IndeavorChallenge.Models
     public class Employee
     {
         public int id { get; set; }
+        [Display(Name= "Surname")]
         public string surname { get; set; }
+        [Display(Name = "Name")]
         public string name { get; set; }
         public ICollection<Skill> skills{ get; set; }
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
+        [Display(Name="Hired At")]
         public DateTime hiringDate { get; set; }
+
+        public Employee()
+        {
+            hiringDate = DateTime.Today;
+        }
 
     }
 }

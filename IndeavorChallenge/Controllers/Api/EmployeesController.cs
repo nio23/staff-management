@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -67,7 +68,7 @@ namespace IndeavorChallenge.Controllers.Api
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var dbEmployee = m_context.Employees.SingleOrDefault(x => x.id == id);
+            var dbEmployee = m_context.Employees.Include(x=>x.skills).SingleOrDefault(x => x.id == id);
 
             if (dbEmployee == null)
                 return NotFound();
@@ -89,5 +90,21 @@ namespace IndeavorChallenge.Controllers.Api
             m_context.SaveChanges();
             return Ok();
         }
+
+        
+        /*[HttpPut]
+        public IHttpActionResult DeleteSkill(int employeeId, int skillId)
+        {
+            var empl = m_context.Employees.Include(x=>x.skills).SingleOrDefault(x => x.id == employeeId);
+            var skill = m_context.Skills.SingleOrDefault(x=>x.id == skillId);
+
+            if (empl == null || skill == null)
+                return NotFound();
+            empl.skills.Remove(skill);
+
+            m_context.SaveChanges();
+            return Ok();
+        }*/
+
     }
 }

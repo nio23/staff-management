@@ -1,32 +1,163 @@
-﻿@model IndeavorChallenge.Models.Employee
+﻿@model IndeavorChallenge.ViewModels.EmployeeViewModel
 @{
-    ViewBag.Title = "New";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "New";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>New</h2>
+@{
+	var isNew = Model.employee.id == 0;
+	var h2Text = isNew? "Add a new Employee": "Details";
+}
+<h2>@h2Text</h2>
 
 @*BeginForm does not have close tag. Using statement will dispose it when no needed anymore*@
 @using (Html.BeginForm("Save", "Employees"))
 {
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<div class="form-group">
+					@Html.LabelFor(x => x.employee.name, new { @class = "text-capitalize" })
+					@Html.TextBoxFor(x => x.employee.name, new { @class = "form-control" })
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(x => x.employee.surname, new { @class = "text-capitalize" })
+					@Html.TextBoxFor(x => x.employee.surname, new { @class = "form-control" })
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(x => x.employee.hiringDate)
+					@Html.DisplayFor(x => x.employee.hiringDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+				</div>
 
 
-    <div class="form-group">
-        @Html.LabelFor(x => x.name, new { @class = "text-capitalize" })
-        @Html.TextBoxFor(x => x.name, new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(x => x.surname, new { @class = "text-capitalize" })
-        @Html.TextAreaFor(x => x.surname, new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(x => x.hiringDate)
-        @Html.DisplayFor(x => x.hiringDate, "{0:d MMM yyyy}", new { @class = "form-control" })
-    </div>
+				@Html.HiddenFor(x => x.employee.id)
+				
+			</div>
+			<div class="col">
+				<div class="form-group">
+					@Html.LabelFor(x=>x.skills)
+					@Html.DropDownListFor(x=>x.skills, new SelectList(Model.skills,"id", "name"), "Select skills", new {@class= "form-control"})
+					<button type="button" class="btn btn-primary mt-3">Add</button>
+				</div>
+			</div>
+		</div>
+		<div class="row my-5">
+			<div class="col-md-auto">
+				<table id="employeeSkills" data-empl-skills="@Model.skills" class="table table-bordered table-hover">
+					<thead>
+					<tr>
+						<th>Skills</th>
+						<th>Action</th>
+							
+					</tr>
+					</thead>
+					<tbody>
+						@if (Model.employee.skills != null)
+						{
+							foreach (var skill in Model.employee.skills)
+							{
+								<tr >
+									<td >@Html.DisplayFor(x => skill.name)</td>
+									<td ><button type="button" class="btn btn-primary btn-sm js-remove-skill" empl-skill-id="@skill.id" empl-id ="@Model.employee.id">Remove</button></td>
+								</tr>
+
+							}
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="form-group">
+			<button type="submit" class="btn btn-primary">Save</button>
+			@if (!isNew)
+			{
+				<button type ="button" id="deleteBtn" class="btn btn-secondary">Delete</button>
+			}
+		</div>
+	</div>
+}
+
+@section scripts
+{
+	<script>
+		$(document).ready(function () {
 
 
-    @Html.HiddenFor(x => x.id)
-    <button type="submit" class="btn btn-primary">Save</button>
-    <button class="btn btn-secondary">Delete</button>
+			var table = $("#employeeSkills").DataTable();
+
+            $("#deleteBtn").on("click", function () {
+				var button = $(this);
+				var emplId = $('#@Html.IdFor(m=>m.employee.id)').val();
+				console.log(emplId);
+                if (confirm("Delete employee?")) {
+                    console.log("CONFIRMED");
+                    $.ajax({
+                        url: "/api/employees/" + emplId,
+                        method: "DELETE",
+                        success: function () {
+                            window.location.href = "/employees/index";
+                        }
+                    });
+                }
+
+
+            });
+
+
+			@*table.on('click', '.js-remove-skill', function () {
+				var emplId = $(this).attr("empl-id");
+				var skillId = $(this).attr("empl-skill-id");
+				console.log("SkillId " + skillId);
+				console.log("Employee " + emplId);
+				$1$$.ajax({
+					url: '/api/employees/deleteSkill/',
+					type: 'POST',
+					data: { employeeId: id, skillId: skillId },
+					success: function (result) {
+						console.log("Deleted!");
+					}
+				});#1#
+			});*@
+
+			table.on('click', '.js-remove-skill', function () {
+				var emplId = $(this).attr("empl-id");
+				var skillId = $(this).attr("empl-skill-id");
+				var emplName = $('#@Html.IdFor(x => x.employee.name)').val();
+				var emplSurName = $('#@Html.IdFor(x => x.employee.surname)').val();
+				var emplSkills = $('#employeeSkills').attr("data-empl-skills");
+				@*emplSkills = Object.values(emplSkills);
+				skillToDel = emplSkills.filter(x => x.id == skillId);*@
+				var arr = table.data().toArray();
+				console.log(arr);
+				console.log("SkillId " + skillId);
+				console.log("Employee " + emplId);
+
+
+				@*$.ajax({
+					url: "/api/employees/" + emplId,
+					method: "PUT",
+					data: {
+						"id": emplId,
+						"name": emplName,
+						"surname": emplSurName,
+						"skills": JSON.stringify(emplSkills),
+						"hiringDate": "2015-02-05T00:00:00",
+					},
+					success: function (response) {
+						console.log("Skill updated!");
+						console.log(response);
+					},
+					error: function (response) {
+						console.log("error");
+						console.log(response);
+					}
+				});*@
+			});
+		});
+
+
+
+
+
+    </script>
 }
 

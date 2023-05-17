@@ -10,14 +10,19 @@
 	<table id="employees" class="table table-bordered table-hover">
 		<thead>
 		<tr>
-			<th>Full Name</th>
+			<th>@Html.DisplayNameFor(x=>x.name)</th>
+			<th>@Html.DisplayNameFor(x=>x.surname)</th>
+			<th>@Html.DisplayNameFor(x=>x.hiringDate)</th>
 		</tr>
 		</thead>
 		<tbody>
 		@foreach (var e in Model)
 		{
-			<tr>
-				<td>@Html.ActionLink(string.Join(" ", e.surname, e.name), "Edit", "Employees", new { id = e.id }, null)</td>
+			<tr id="row" employee-id="@e.id">
+				@*<td>@Html.ActionLink(string.Join(" ", e.surname, e.name), "Edit", "Employees", new { id = e.id }, null)</td>*@
+				<td>@e.name</td>
+				<td>@e.surname</td>
+				<td>@e.hiringDate.ToShortDateString()</td>
 			</tr>
 
 		}
@@ -29,10 +34,19 @@
 {
 	<script>
 		$(document).ready(function () {
-			$("#employees").DataTable();
+			var table = $("#employees").DataTable();
+
+
+
+			$('#employees').on('click', 'tbody tr', function () {
+				var id = $(this).attr("employee-id");
+				console.log(id);
+
+				window.location.href = "/employees/edit/" + id;
+			})
 		});
 
-		
+
 	</script>
 }
 

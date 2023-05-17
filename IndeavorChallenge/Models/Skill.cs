@@ -18,7 +18,10 @@ namespace IndeavorChallenge.Models
         public string description { get; set; }
 
         public ICollection<Employee> employees { get; set; }
-    
 
+        public Skill()
+        {
+            dateCreated = DateTime.Today;
+        }
     }
 }

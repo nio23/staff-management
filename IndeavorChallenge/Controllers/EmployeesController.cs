@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using IndeavorChallenge.Models;
+using IndeavorChallenge.ViewModels;
 
 namespace IndeavorChallenge.Controllers
 {
@@ -25,18 +27,35 @@ namespace IndeavorChallenge.Controllers
 
         public ActionResult Edit(int id)
         {
-            var empl = m_context.Employees.SingleOrDefault(x => x.id == id);
+            var empl = m_context.Employees.Include(c=>c.skills).SingleOrDefault(x => x.id == id);
+            var skills = m_context.Skills.ToList();
+
             if (empl == null)
                 return HttpNotFound();
 
-            return View("New",empl);
+            var viewModel = new EmployeeViewModel
+            {
+                employee = empl,
+                skills = skills
+
+            };
+            
+
+            return View("New", viewModel);
         }
 
         public ActionResult New()
         {
             var emp = new Employee();
+            var skills = m_context.Skills.ToList();
 
-            return View(emp);
+            var viewModel = new EmployeeViewModel
+            {
+                employee = emp,
+                skills = skills
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -60,7 +79,7 @@ namespace IndeavorChallenge.Controllers
 
             m_context.SaveChanges();
 
-            return RedirectToAction("Index", "Skills");
+            return RedirectToAction("Index", "Employees");
         }
     }
 }
