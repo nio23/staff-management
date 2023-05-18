@@ -54,6 +54,12 @@ namespace IndeavorChallenge.Controllers
         [HttpPost]
         public ActionResult Save(Skill skill)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("New", skill);
+            }
+
+
             if (skill.id == 0)
             {
                 m_context.Skills.Add(skill);

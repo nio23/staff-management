@@ -21,7 +21,7 @@
 				@if (skill != null && !skill.name.IsNullOrWhiteSpace())
 				{
 					<td>@Html.ActionLink(skill.name, "Edit", "Skills", new { id = skill.id }, null)</td>
-					<td>@skill.dateCreated</td>
+					<td>@skill.dateCreated.ToShortDateString()</td>
 				}
 			</tr>
 

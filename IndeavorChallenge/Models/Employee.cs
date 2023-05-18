@@ -11,8 +11,10 @@ namespace IndeavorChallenge.Models
     public class Employee
     {
         public int id { get; set; }
+        [Required]
         [Display(Name= "Surname")]
         public string surname { get; set; }
+        [Required]
         [Display(Name = "Name")]
         public string name { get; set; }
         public ICollection<Skill> skills{ get; set; }

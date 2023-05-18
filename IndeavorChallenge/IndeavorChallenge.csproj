@@ -194,6 +194,14 @@
     <Compile Include="Migrations\202305161920524_populateSkillEmployeesTable.designer.cs">
       <DependentUpon>202305161920524_populateSkillEmployeesTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202305181422349_updateSkillModel.cs" />
+    <Compile Include="Migrations\202305181422349_updateSkillModel.designer.cs">
+      <DependentUpon>202305181422349_updateSkillModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305181432430_updateEmployeeModel.cs" />
+    <Compile Include="Migrations\202305181432430_updateEmployeeModel.designer.cs">
+      <DependentUpon>202305181432430_updateEmployeeModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\Employee.cs" />
@@ -567,6 +575,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202305161920524_populateSkillEmployeesTable.resx">
       <DependentUpon>202305161920524_populateSkillEmployeesTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305181422349_updateSkillModel.resx">
+      <DependentUpon>202305181422349_updateSkillModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305181432430_updateEmployeeModel.resx">
+      <DependentUpon>202305181432430_updateEmployeeModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

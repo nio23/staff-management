@@ -10,6 +10,7 @@ namespace IndeavorChallenge.Models
     public class Skill
     {
         public int id { get; set; }
+        [Required]
         public string name { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "Created at")]

@@ -61,6 +61,18 @@ namespace IndeavorChallenge.Controllers
         [HttpPost]
         public ActionResult Save(EmployeeViewModel emplViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new EmployeeViewModel
+                {
+                    employee = emplViewModel.employee,
+                    skills = m_context.Skills.ToList()
+
+                };
+
+                return View("New", viewModel);
+            }
+
             if (emplViewModel.employee.id == 0)
             {
                 m_context.Employees.Add(emplViewModel.employee);
