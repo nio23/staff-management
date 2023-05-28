@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -59,32 +60,33 @@ namespace IndeavorChallenge.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(EmployeeViewModel emplViewModel)
+        public ActionResult Save(Employee employee)
         {
+            Debug.WriteLine("Try to save");
             if (!ModelState.IsValid)
             {
                 var viewModel = new EmployeeViewModel
                 {
-                    employee = emplViewModel.employee,
+                    employee = employee,
                     skills = m_context.Skills.ToList()
 
                 };
-
+                Debug.WriteLine("IS INVALID");
                 return View("New", viewModel);
             }
 
-            if (emplViewModel.employee.id == 0)
+            if (employee.id == 0)
             {
-                m_context.Employees.Add(emplViewModel.employee);
+                m_context.Employees.Add(employee);
             }
             else
             {
-                var dbempl = m_context.Employees.SingleOrDefault(x => x.id == emplViewModel.employee.id);
+                var dbempl = m_context.Employees.Include(x=>x.skills).SingleOrDefault(x => x.id == employee.id);
 
-                dbempl.name = emplViewModel.employee.name;
-                dbempl.surname = emplViewModel.employee.surname;
-                dbempl.hiringDate = emplViewModel.employee.hiringDate;
-                dbempl.skills = emplViewModel.employee.skills;
+                dbempl.name = employee.name;
+                dbempl.surname = employee.surname;
+                dbempl.hiringDate = employee.hiringDate;
+                dbempl.skills = employee.skills;
 
             }
 

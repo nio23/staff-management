@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 
 namespace IndeavorChallenge.Models
@@ -20,7 +18,7 @@ namespace IndeavorChallenge.Models
         public ICollection<Skill> skills{ get; set; }
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
-        [Display(Name="Hired At")]
+        [Display(Name="Hired At: ")]
         public DateTime hiringDate { get; set; }
 
         public Employee()

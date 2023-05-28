@@ -1,6 +1,7 @@
-﻿@model IndeavorChallenge.ViewModels.EmployeeViewModel
+﻿@using Newtonsoft.Json
+@model IndeavorChallenge.ViewModels.EmployeeViewModel
 @{
-	ViewBag.Title = "New";
+	ViewBag.Title = "Details";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
@@ -12,6 +13,7 @@
 @*BeginForm does not have close tag. Using statement will dispose it when no needed anymore*@
 @using (Html.BeginForm("Save", "Employees"))
 {
+	@Html.ValidationSummary()
 	<div class="container">
 		<div class="row">
 			<div class="col">
@@ -26,25 +28,21 @@
 					@Html.ValidationMessageFor(x=>x.employee.surname)
 				</div>
 				<div class="form-group">
-					@Html.LabelFor(x => x.employee.hiringDate)
+					@Html.LabelFor(x=>x.employee.hiringDate)
 					@Html.DisplayFor(x => x.employee.hiringDate, "{0:d MMM yyyy}", new { @class = "form-control" })
 				</div>
-
-
-				@Html.HiddenFor(x => x.employee.id)
-				
 			</div>
 			<div class="col">
 				<div class="form-group">
 					@Html.LabelFor(x=>x.skills)
-					@Html.DropDownListFor(x=>x.skills, new SelectList(Model.skills,"id", "name"), "Select skills", new {@class= "form-control"})
+					@Html.DropDownList("skills", new SelectList(Model.skills,"id", "name"), "Select skill", new {@class= "form-control"})
 					<button id="addNewSkillBtn" type="button" class="btn btn-primary mt-3">Add</button>
 				</div>
 			</div>
 		</div>
 		<div class="row my-5">
 			<div class="col-md-auto">
-				<table id="employeeSkills" data-empl-skills="@Model.skills" class="table table-bordered table-hover">
+				<table id="employeeSkills" data-empl-skills="@JsonConvert.SerializeObject(Model.employee.skills)" class="table table-bordered table-hover">
 					<thead>
 					<tr>
 						<th>Skills</th>
@@ -69,10 +67,11 @@
 			</div>
 		</div>
 		<div class="form-group">
+			@Html.HiddenFor(x => x.employee.id)
 			<button type="submit" class="btn btn-primary">Save</button>
 			@if (!isNew)
 			{
-				<button type ="button" id="deleteBtn" class="btn btn-secondary">Delete</button>
+				<button type="button" id="deleteBtn" class="btn btn-secondary">Delete</button>
 			}
 		</div>
 	</div>
@@ -80,61 +79,84 @@
 
 @section scripts
 {
-    <script>
+	<script>
 		$(document).ready(function () {
 
-
+			var emplId = $('#@Html.IdFor(m => m.employee.id)').val();
+			var employee = "";
 			var table = $("#employeeSkills").DataTable();
 
-			$("#addNewSkillBtn").on("click", function () {
-				var emplId = $('#@Html.IdFor(m => m.employee.id)').val();
-				var button = $(this);
-				var selectedSkill = $("#skills option:selected").val();
-				var selectedSkillName = $('#skills option:selected').text();
-				console.log(selectedSkill);
-                console.log(selectedSkillName);
-
-				//table.row.add(selectedSkillName).draw();
-
-				@*$.ajax({
-                    url: '/api/employees/employeeskill/' + selectedSkill,
-					type: 'PUT',
+			if (emplId > 0) {
+				$.ajax({
+					url: '/api/employees/' + emplId,
+					type: 'GET',
+					datatype: 'json',
 					data: {
-						"emplId": emplId,
-						"skillId": selectedSkill
-						},
-					success: function (response) {
-						// Handle success response
-						console.log(response);
+						"id": emplId
 					},
-					error: function (xhr, textStatus, errorThrown) {
-						// Handle error response
-						console.log(xhr.responseText);
+					success: function (result) {
+						// Process the response data
+						employee = result;
+						console.log(employee);
+					},
+					error: function (xhr, status, error) {
+						// Handle the error
+						console.log(error);
 					}
+				});
+			}
 
-				});*@
+			$("#deleteBtn").on("click", function () {
+				var button = $(this);
+
+				console.log(emplId);
+				if (confirm("Delete employee?")) {
+					console.log("CONFIRMED");
+					$.ajax({
+						url: "/api/employees/" + emplId,
+						method: "DELETE",
+						success: function () {
+							window.location.href = "/employees/index";
+						}
+					});
+				}
+
+
 			});
 
-            $("#deleteBtn").on("click", function () {
+			//ToDo
+			$("#addNewSkillBtn").on("click", function () {
 				var button = $(this);
-				var emplId = $('#@Html.IdFor(m => m.employee.id)').val();
-				console.log(emplId);
-                if (confirm("Delete employee?")) {
-                    console.log("CONFIRMED");
-                    $.ajax({
-                        url: "/api/employees/" + emplId,
-                        method: "DELETE",
-                        success: function () {
-                            window.location.href = "/employees/index";
-                        }
-                    });
-                }
+				var selectedSkillId = $("#skills option:selected").val();
+				var selectedSkillName = $('#skills option:selected').text();
+				var emplSkills = JSON.parse($("#employeeSkills").attr("data-empl-skills"));
+				console.log(selectedSkillId);
+				console.log(selectedSkillName);
+				console.log(emplSkills);
+
+				$.ajax({
+					url: '/api/skills/' + selectedSkillId,
+					type: 'GET',
+					datatype: 'json',
+					data: {
+						"skillId": selectedSkillId
+					},
+					success: function (response) {
+						console.log(response);
+						table.row.add([response.name, '<button type="button" class="btn btn-primary btn-sm js-remove-skill" empl-skill-id="' + response.id + '" empl-id ="' + emplId + '">Remove</button>']).draw();
+						//emplSkills.push(response);
+						console.log(emplSkills);
+						//var s = $('#employeeSkills').attr('data-empl-skills').Add(response);
+						//employee.skills.push(response);
+						//console.log(s);
+
+					}
+
+				});
+			});
 
 
-            });
-
-
-
+			//ToDo
 			table.on('click', '.js-remove-skill', function () {
 				var emplId = $(this).attr("empl-id");
 				var skillId = $(this).attr("empl-skill-id");
@@ -150,12 +172,13 @@
 
 
 			});
+
 		});
 
 
 
 
 
-    </script>
+	</script>
 }
 
