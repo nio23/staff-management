@@ -18,11 +18,13 @@ namespace IndeavorChallenge.Models
         public DateTime dateCreated { get; set; }
         public string description { get; set; }
 
-        public ICollection<Employee> employees { get; set; }
+        public virtual ICollection<Employee> employees { get; set; }
 
         public Skill()
         {
             dateCreated = DateTime.Today;
         }
+
+        public string shortDateCreated { get => dateCreated.ToShortDateString(); }
     }
 }

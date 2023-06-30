@@ -15,7 +15,7 @@ namespace IndeavorChallenge.Models
         [Required]
         [Display(Name = "Name")]
         public string name { get; set; }
-        public ICollection<Skill> skills{ get; set; }
+        public virtual ICollection<Skill> skills{ get; set; }
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         [Display(Name="Hired At: ")]

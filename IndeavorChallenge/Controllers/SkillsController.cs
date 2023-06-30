@@ -22,14 +22,11 @@ namespace IndeavorChallenge.Controllers
         // GET: Skills
         public ActionResult Index()
         {
-            /*var skills = new List<Skill>();
-            skills.Add(new Skill(){id = 1, name = "Organize", dateCreated = new DateTime(2018, 5, 22) });
-            skills.Add(new Skill(){id = 2, name = "Leadership", dateCreated = new DateTime(2015,2,5)});*/
+            //var skills = m_context.Skills.ToList();
 
-            var skills = m_context.Skills.ToList();
-            
 
-            return View(skills);
+            //return View(skills);
+            return View();
         }
 
 

@@ -2,30 +2,60 @@
 @using Microsoft.Ajax.Utilities
 @model IEnumerable<IndeavorChallenge.Models.Skill>
 @{
-	ViewBag.Title = "Skills";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Skills";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Skills</h2>
 <table id="skills" class="table table-bordered table-hover">
-	<thead>
-		<tr>
-			<th>Skill</th>
-			<th>Date Created</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var skill in Model)
-		{
-			<tr>
-				@if (skill != null && !skill.name.IsNullOrWhiteSpace())
-				{
-					<td>@Html.ActionLink(skill.name, "Edit", "Skills", new { id = skill.id }, null)</td>
-					<td>@skill.dateCreated.ToShortDateString()</td>
-				}
-			</tr>
+    <thead>
+        <tr>
+            <th>Skill</th>
+            <th>Date Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        @*@foreach (var skill in Model)
+            {
+                <tr>
+                    @if (skill != null && !skill.name.IsNullOrWhiteSpace())
+                    {
+                        <td>@Html.ActionLink(skill.name, "Edit", "Skills", new { id = skill.id }, null)</td>
+                        <td>@skill.dateCreated.ToShortDateString()</td>
+                    }
+                </tr>
 
-		}
-	</tbody>
+            }*@
+    </tbody>
 </table>
 
+@section scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script>
+
+
+        $(document).ready(function () {
+            $('#skills').DataTable({
+                ajax: {
+                    url: "/api/skills",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "name",
+                        render: function (data, type, skill) {
+                            return "<a href='/skills/edit/" + skill.id + "'>" + skill.name + "</a>"
+                        }
+                    },
+                    {
+                        data: "dateCreated",
+                        render: function (data) {
+                            return moment(data).format('M/D/YYYY');
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}

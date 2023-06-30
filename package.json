@@ -1,0 +1,19 @@
+{
+  "name": "indeavorchallenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "datatables.net-bs5": "^1.13.4",
+    "datatables.net-datetime": "^1.4.1",
+    "datatables.net-plugins": "^1.13.4",
+    "jquery": "^3.7.0",
+    "moment": "^2.29.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

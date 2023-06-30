@@ -14,6 +14,7 @@ namespace IndeavorChallenge
             var settings = config.Formatters.JsonFormatter.SerializerSettings;
             settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             settings.Formatting = Formatting.Indented;
+            //settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 
             config.MapHttpAttributeRoutes();
 
