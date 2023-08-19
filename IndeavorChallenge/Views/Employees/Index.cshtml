@@ -1,52 +1,74 @@
 ﻿@model  IEnumerable<IndeavorChallenge.Models.Employee>
 @{
-	ViewBag.Title = "AllEmployees";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Employees";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>All Employees</h2>
-@if (Model != null)
-{
-	<table id="employees" class="table table-bordered table-hover">
-		<thead>
-		<tr>
-			<th>@Html.DisplayNameFor(x=>x.name)</th>
-			<th>@Html.DisplayNameFor(x=>x.surname)</th>
-			<th>@Html.DisplayNameFor(x=>x.hiringDate)</th>
-		</tr>
-		</thead>
-		<tbody>
-		@foreach (var e in Model)
-		{
-			<tr id="row" employee-id="@e.id">
-				@*<td>@Html.ActionLink(string.Join(" ", e.surname, e.name), "Edit", "Employees", new { id = e.id }, null)</td>*@
-				<td>@e.name</td>
-				<td>@e.surname</td>
-				<td>@e.hiringDate.ToShortDateString()</td>
-			</tr>
+<h2>Companie's Employees</h2>
 
-		}
-		</tbody>
-	</table>
-}
+
+<table id="employees" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(x => x.name)</th>
+            <th>@Html.DisplayNameFor(x => x.surname)</th>
+            <th>@Html.DisplayNameFor(x => x.hiringDate)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @*@foreach (var e in Model)
+            {
+                <tr id="row" employee-id="@e.id">
+                    //<td>@Html.ActionLink(string.Join(" ", e.surname, e.name), "Edit", "Employees", new { id = e.id }, null)</td>
+                    <td>@e.name</td>
+                    <td>@e.surname</td>
+                    <td>@e.hiringDate.ToShortDateString()</td>
+                </tr>
+
+            }*@
+    </tbody>
+</table>
+
 
 @section scripts
 {
-	<script>
-		$(document).ready(function () {
-			var table = $("#employees").DataTable();
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var table = $("#employees").DataTable({
+                ajax: {
+                    url: "/api/employees",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "name"
+                    },
+                    {
+                        data: "surname"
+                    },
+                    {
+                        data: "hiringDate",
+                        render: function (data) {
+                            return moment(data).format('M/D/YYYY');
+                        }
+                    }
+                ]
+            });
 
 
 
-			$('#employees').on('click', 'tbody tr', function () {
-				var id = $(this).attr("employee-id");
-				console.log(id);
+            $('#employees tbody').on('click', 'tr', function () {
+                var data = table.row(this).data();
 
-				window.location.href = "/employees/edit/" + id;
-			})
-		});
+                //alert('You clicked on ' + data.id + "'s row");
+                window.location.href = "/employees/edit/" + data.id;
+
+               
+            });
+        });
 
 
-	</script>
+    </script>
 }
 

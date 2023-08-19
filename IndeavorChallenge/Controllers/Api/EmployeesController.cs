@@ -30,7 +30,7 @@ namespace IndeavorChallenge.Controllers.Api
         //GET /api/employees
         public IHttpActionResult GetEmployees()
         {
-            return Ok( m_context.Employees.ToList().Select(Mapper.Map<Employee,EmployeeDto>));
+            return Ok( m_context.Employees.ToList().Select(Mapper.Map<Employee, EmployeeDto>));
         }
 
         //GET /api/employees/1
@@ -68,13 +68,15 @@ namespace IndeavorChallenge.Controllers.Api
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var dbEmployee = m_context.Employees.SingleOrDefault(x => x.id == id);
+            var dbEmployee = m_context.Employees.Include(x=> x.skills).SingleOrDefault(x => x.id == id);
+            
 
             if (dbEmployee == null)
                 return NotFound();
 
+
             Mapper.Map<EmployeeDto, Employee>(employeeDto, dbEmployee);
-            //m_context.Entry(dbEmployee).State = EntityState.Modified;
+
             m_context.SaveChanges();
             return Ok();
         }

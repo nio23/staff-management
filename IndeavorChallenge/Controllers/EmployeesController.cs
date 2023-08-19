@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using IndeavorChallenge.Models;
 using IndeavorChallenge.ViewModels;
+using IndeavorChallenge.Dtos;
 
 namespace IndeavorChallenge.Controllers
 {
@@ -22,71 +23,107 @@ namespace IndeavorChallenge.Controllers
 
         public ActionResult Index()
         {
-            var employees = m_context.Employees.ToList();
-            return View(employees);
+            //var employees = m_context.Employees.ToList();
+            //return View(employees);
+            return View();
         }
 
         public ActionResult Edit(int id)
         {
-            var empl = m_context.Employees.Include(c=>c.skills).SingleOrDefault(x => x.id == id);
-            var skills = m_context.Skills.ToList();
+            var emplDto = m_context.Employees.Include(c=>c.skills).Select(Mapper.Map<Employee, EmployeeDto>).SingleOrDefault(x => x.id == id);
+            //var emplDto = Mapper.Map<Employee, EmployeeDto>(empl);
+            var skills = m_context.Skills.Select(Mapper.Map<Skill, SkillDto>);
 
-            if (empl == null)
+
+
+            if (emplDto == null)
                 return HttpNotFound();
 
-            var viewModel = new EmployeeViewModel
+            /*var viewModel = new EmployeeViewModel
             {
-                employee = empl,
-                skills = skills
+                employeeDto = emplDto,
+                allSkills = skills,
+                selectedSkills = emplDto.skills.Select(x => x.id).ToList()
+            };*/
 
-            };
+            var viewModel = new EmployeeViewModel(emplDto, skills, emplDto.skills.Select(x => x.id).ToList());
+
             
 
-            return View("New", viewModel);
+            return View("EmployeeForm", viewModel);
         }
 
         public ActionResult New()
         {
-            var emp = new Employee();
-            var skills = m_context.Skills.ToList();
+            var emp = new EmployeeDto();
+            var skills = m_context.Skills.Select(Mapper.Map<Skill, SkillDto>).ToList();
 
             var viewModel = new EmployeeViewModel
             {
-                employee = emp,
-                skills = skills
+                employeeDto = emp,
+                allSkills = skills
             };
 
-            return View(viewModel);
+
+
+            return View("EmployeeForm", viewModel);
         }
 
         [HttpPost]
-        public ActionResult Save(Employee employee)
+        public ActionResult Save(EmployeeViewModel viewModel)
         {
             Debug.WriteLine("Try to save");
+
+  
             if (!ModelState.IsValid)
             {
-                var viewModel = new EmployeeViewModel
+                var vm = new EmployeeViewModel
                 {
-                    employee = employee,
-                    skills = m_context.Skills.ToList()
+                    employeeDto = viewModel.employeeDto,
+                    allSkills = m_context.Skills.Select(Mapper.Map<Skill, SkillDto>).ToList(),
+                    selectedSkills = viewModel.selectedSkills
 
                 };
-                Debug.WriteLine("IS INVALID");
-                return View("New", viewModel);
+                return View("EmployeeForm", vm);
             }
 
-            if (employee.id == 0)
+            var selectedSkillsId = viewModel.skillCheckBoxes
+                .Where(m => m.isChecked)
+                .Select(x => x.skill.id);
+
+            var dbSelectedSkills = m_context.Skills
+                .Where(x => selectedSkillsId
+                .Contains(x.id))
+                .Distinct()
+                .ToList();
+
+            /*var dbSelectedSkills = m_context.Skills
+                .Where(x => viewModel.selectedSkills
+                .Contains(x.id))
+                .Distinct()
+                .ToList();*/
+                     
+            if (viewModel.employeeDto.id == 0)
             {
-                m_context.Employees.Add(employee);
+                
+                var empl = m_context.Employees.Add(Mapper.Map<EmployeeDto, Employee>(viewModel.employeeDto));                
+                //selectedSkills.ForEach(x => x.employees.Add(empl));
+                Mapper.Map<EmployeeDto, Employee>(viewModel.employeeDto, empl);
+                empl.skills = dbSelectedSkills;
             }
             else
             {
-                var dbempl = m_context.Employees.Include(x=>x.skills).SingleOrDefault(x => x.id == employee.id);
+                var dbempl = m_context.Employees
+                    .Include(x=>x.skills)
+                    .Single(x => x.id == viewModel.employeeDto.id);
+                Mapper.Map<EmployeeDto, Employee>(viewModel.employeeDto, dbempl);
+                dbempl.skills = dbSelectedSkills;
 
-                dbempl.name = employee.name;
+                /*dbempl.name = employee.name;
                 dbempl.surname = employee.surname;
                 dbempl.hiringDate = employee.hiringDate;
-                dbempl.skills = employee.skills;
+                dbempl.skills = employee.skills;*/
+
 
             }
 
@@ -95,5 +132,7 @@ namespace IndeavorChallenge.Controllers
 
             return RedirectToAction("Index", "Employees");
         }
+
+       
     }
 }

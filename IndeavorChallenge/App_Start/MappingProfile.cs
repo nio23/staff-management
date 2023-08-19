@@ -14,8 +14,10 @@ namespace IndeavorChallenge.App_Start
         {
             Mapper.CreateMap<Skill, SkillDto>();
             Mapper.CreateMap<SkillDto, Skill>();
+            Mapper.CreateMap<Skill, Skill>();
             Mapper.CreateMap<Employee, EmployeeDto>();
             Mapper.CreateMap<EmployeeDto, Employee>();
+            Mapper.CreateMap<Employee, Employee>();
         }
     }
 }
