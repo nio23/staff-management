@@ -39,14 +39,7 @@ namespace IndeavorChallenge.Controllers
             if (emplDto == null)
                 return HttpNotFound();
 
-            /*var viewModel = new EmployeeViewModel
-            {
-                employeeDto = emplDto,
-                allSkills = skills,
-                selectedSkills = emplDto.skills.Select(x => x.id).ToList()
-            };*/
-
-            var viewModel = new EmployeeViewModel(emplDto, skills, emplDto.skills.Select(x => x.id).ToList());
+            var viewModel = new EmployeeViewModel(emplDto, skills);
 
             
 
@@ -77,13 +70,10 @@ namespace IndeavorChallenge.Controllers
   
             if (!ModelState.IsValid)
             {
-                var vm = new EmployeeViewModel
-                {
-                    employeeDto = viewModel.employeeDto,
-                    allSkills = m_context.Skills.Select(Mapper.Map<Skill, SkillDto>).ToList(),
-                    selectedSkills = viewModel.selectedSkills
-
-                };
+               
+                var empl = m_context.Employees.Include(x=>x.skills).Select(Mapper.Map<Employee, EmployeeDto>).SingleOrDefault(x=>x.id == viewModel.employeeDto.id);
+                var allskills = m_context.Skills.Select(Mapper.Map<Skill, SkillDto>);
+                var vm = new EmployeeViewModel(empl, allskills);
                 return View("EmployeeForm", vm);
             }
 

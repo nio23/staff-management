@@ -33,51 +33,21 @@
 					@Html.DisplayFor(x => x.employeeDto.hiringDate, "{0:d MMM yyyy}", new { @class = "form-control" })
 				</div>
 			</div>
-			<!--<div class="col">
-				<div class="form-group">
-					@Html.LabelFor(x => x.allSkills)-->
-					@*@Html.DropDownListFor(x=>x.employeeDto.skills, new SelectList(Model.skillsDto, "id", "name"), "Select skill", new {@class= "form-control", id="skillsTable"})*@
-					<!--@Html.ListBoxFor(x => x.selectedSkills , new MultiSelectList(Model.allSkills, "id", "name", Model.selectedSkills), new { @class = "form-control", multiple = "multiple" })
-										
-				</div>
-			</div>-->
-		</div>
-		@*<div class="row my-5">
-			<div class="col-md-auto">
-				<table id="employeeSkills" class="table table-bordered table-hover">
-					<thead>
-					<tr>
-						<th>Skills</th>
-						<th>Action</th>
-							
-					</tr>
-					</thead>
-					<tbody>
-						@if (Model.employeeDto.skills != null)
-						{
-							foreach (var skill in Model.employeeDto.skills)
-							{
-								<tr >
-									<td >@Html.DisplayFor(x => skill.name)</td>
-									<td ><button type="button" class="btn btn-primary btn-sm js-remove-skill" empl-skill-id="@skill.id">Remove</button></td>
-								</tr>
 
-							}
-						}
-					</tbody>
-				</table>
-			</div>
-		</div>*@
+		</div>		
 		<div class="row my-5">
-            <div class="col">
-                @foreach (var item in Model.skillCheckBoxes)
-                {
-                    <div class="form-check">
-						@Html.CheckBoxFor(x=> item.isChecked, new {@class="form-check-input" })
-						@Html.DisplayFor(x=>item.skill.name, new {@class= "form-check-label" })                  
-                    </div>
-                }
-                </div>
+			<div class="col">
+				
+				@for(int i=0; i< Model.skillCheckBoxes.Count(); i++)
+				{
+					var item = Model.skillCheckBoxes[i];
+					<div class="form-check">
+						@Html.CheckBoxFor(x=>x.skillCheckBoxes[i].isChecked, new {@class="form-check-input" })
+						@Html.DisplayFor(x=> x.skillCheckBoxes[i].skill.name, new {@class= "form-check-label" })   
+						@Html.HiddenFor(x=> x.skillCheckBoxes[i].skill.id)
+					</div>
+				}
+				</div>
 		</div>
 		<div class="form-group">
 			@Html.HiddenFor(x => x.employeeDto.id)

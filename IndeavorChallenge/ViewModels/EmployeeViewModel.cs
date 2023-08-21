@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using IndeavorChallenge.Models;
 using IndeavorChallenge.Dtos;
+using System.Diagnostics;
 
 namespace IndeavorChallenge.ViewModels
 {
@@ -18,35 +19,26 @@ namespace IndeavorChallenge.ViewModels
 
         public List<SkillCheckBox> skillCheckBoxes { get; set; }
 
-        public EmployeeViewModel(EmployeeDto employee, IEnumerable<SkillDto> allSkills, List<int> selectedSkills)
+        public EmployeeViewModel(EmployeeDto employee, IEnumerable<SkillDto> allSkills)
         {
             employeeDto = employee;
             this.allSkills = allSkills;
-            this.selectedSkills = selectedSkills;
-            skillCheckBoxes = initCheckBoxes();
+            Debug.WriteLine("Allskills Count "+allSkills.Count());
+            skillCheckBoxes = allSkills
+                .Select(x => new SkillCheckBox {
+                    skill = x,
+                    isChecked = employee.skills
+                        .Select(m => m.id)
+                        .Contains(x.id)                    
+                })
+                .ToList();
+
         }
 
-        public EmployeeViewModel() {
-            skillCheckBoxes = new List<SkillCheckBox>();
-        }
+        public EmployeeViewModel() {  }
 
-        private List<SkillCheckBox> initCheckBoxes()
-        {
-            List<SkillCheckBox> cb = new List<SkillCheckBox>();
-            foreach(var item in allSkills)
-            {
-                cb.Add(new SkillCheckBox
-                {
-                    skill = item,
-                    isChecked = false
-                });
 
-                if (selectedSkills.Contains(item.id))
-                    cb[cb.Count - 1].isChecked = true;
-                
-            }
 
-            return cb;
-        } 
+   
     }
 }
