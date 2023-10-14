@@ -1,0 +1,124 @@
+﻿@using Newtonsoft.Json
+@model StaffManagement.ViewModels.EmployeeViewModel
+@{
+	ViewBag.Title = "Details";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+	var isNew = Model.employeeDto.id == 0;
+	var h2Text = isNew? "Add a new Employee": "Details";
+}
+<h2>@h2Text</h2>
+
+@*BeginForm does not have close tag. Using statement will dispose it when no needed anymore*@
+@*@using(Html.BeginForm("Save","Employees", null, null, new { @id = "employeeForm"}))*@
+@using(Html.BeginForm("Save", "Employees", FormMethod.Post, new { @id = "employeeForm" }))
+{
+	@Html.ValidationSummary()
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<div class="form-group">
+					@Html.LabelFor(x => x.employeeDto.name, new { @class = "text-capitalize" })
+					@Html.TextBoxFor(x => x.employeeDto.name, new { @class = "form-control" })
+					@Html.ValidationMessageFor(x=>x.employeeDto.name)
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(x => x.employeeDto.surname, new { @class = "text-capitalize" })
+					@Html.TextBoxFor(x => x.employeeDto.surname, new { @class = "form-control" })
+					@Html.ValidationMessageFor(x=>x.employeeDto.surname)
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(x=>x.employeeDto.hiringDate, new { @class = "text-capitalize" })
+					@*@Html.DisplayFor(x => x.employeeDto.hiringDate, "{0:d MMM yyyy}", new { @class = "form-control" })*@
+					@Html.DisplayFor(x=>x.employeeDto.hiringDate, new { @class = "form-control"})
+				</div>
+			</div>
+
+		</div>		
+		<div class="row my-5">
+			<div class="col">
+				
+				@for(int i=0; i< Model.skillCheckBoxes.Count(); i++)
+				{
+					var item = Model.skillCheckBoxes[i];
+					<div class="form-check">
+						@Html.CheckBoxFor(x=>x.skillCheckBoxes[i].isChecked, new {@class="form-check-input" })
+						@Html.DisplayFor(x=> x.skillCheckBoxes[i].skill.name, new {@class= "form-check-label" })   
+						@Html.HiddenFor(x=> x.skillCheckBoxes[i].skill.id)
+					</div>
+				}
+				</div>
+		</div>
+		<div class="form-group">
+			@Html.HiddenFor(x => x.employeeDto.id)
+			<button type="submit" class="btn btn-primary">Save</button>
+			@if (!isNew)
+			{
+				<button type="button" id="deleteBtn" class="btn btn-secondary">Delete</button>
+			}
+		</div>
+	</div>
+}
+
+@section scripts
+{
+	<script>
+		$(document).ready(function () {
+
+			var emplId = $('#@Html.IdFor(m => m.employeeDto.id)').val();
+			var employee = "";
+			console.log(emplId);
+
+			if (emplId > 0) {
+				$.ajax({
+					url: '/api/employees/' + emplId,
+					type: 'GET',
+					datatype: 'json',
+					data: {
+						"id": emplId
+					},
+					success: function (result) {
+						// Process the response data
+						employee = result;
+						console.log(employee);
+						console.log(employee.name);
+					},
+					error: function (xhr, status, error) {
+						// Handle the error
+						console.log(error);
+					}
+				});
+			}
+
+			$("#deleteBtn").on("click", function () {
+				var button = $(this);
+
+				console.log(emplId);
+				if (confirm("Delete employee?")) {
+					console.log("CONFIRMED");
+					$.ajax({
+						url: "/api/employees/" + emplId,
+						method: "DELETE",
+						success: function () {
+							window.location.href = "/employees/index";
+						}
+					});
+				}
+
+
+			});
+
+
+			
+
+		});
+
+
+
+
+
+
+	</script>
+}
+

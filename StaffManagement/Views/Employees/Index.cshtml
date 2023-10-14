@@ -1,0 +1,86 @@
+﻿@model  IEnumerable<StaffManagement.Dtos.EmployeeDto>
+@{
+    ViewBag.Title = "Employees";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <h2>Company Employees</h2>
+    </div>
+    <div class="row my-2">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            @using (Html.BeginForm("New", "Employees"))
+            {
+                <button type="submit" class="btn btn-primary btn-lg">Add Employee</button>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <table id="employees" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(x => x.name)</th>
+                    <th>@Html.DisplayNameFor(x => x.surname)</th>
+                    <th>@Html.DisplayNameFor(x => x.hiringDate)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @*@foreach (var e in Model)
+                {
+                    <tr id="row" employee-id="@e.id">
+                        //<td>@Html.ActionLink(string.Join(" ", e.surname, e.name), "Edit", "Employees", new { id = e.id }, null)</td>
+                        <td>@e.name</td>
+                        <td>@e.surname</td>
+                        <td>@e.hiringDate.ToShortDateString()</td>
+                    </tr>
+
+                }*@
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var table = $("#employees").DataTable({
+                ajax: {
+                    url: "/api/employees",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "name"
+                    },
+                    {
+                        data: "surname"
+                    },
+                    {
+                        data: "hiringDate",
+                        render: function (data) {
+                            return moment(data).format('D/M/YYYY');
+                        }
+                    }
+                ]
+            });
+
+
+
+            $('#employees tbody').on('click', 'tr', function () {
+                var data = table.row(this).data();
+
+                //alert('You clicked on ' + data.id + "'s row");
+                window.location.href = "/employees/edit/" + data.id;
+
+               
+            });
+        });
+
+
+    </script>
+}
+

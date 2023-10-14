@@ -1,0 +1,69 @@
+﻿@model StaffManagement.Models.Skill
+@{
+	//ViewBag.Title = "New";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+	bool newEntry = Model.id == 0;
+	var h2Tag = newEntry ? "Add a new Skill" : "Skill Details";
+	ViewBag.Title = h2Tag;
+}
+
+<h2>@h2Tag</h2>
+
+@if (newEntry)
+{
+	Model.dateCreated = DateTime.Now;
+}
+
+@*BeginForm does not have close tag. Using statement will dispose it when no needed anymore*@
+@using (Html.BeginForm("Save", "Skills"))
+{
+
+
+	<div class="form-group">
+		@Html.LabelFor(x => x.name, new { @class = "text-capitalize" })
+		@Html.TextBoxFor(x => x.name, new { @class = "form-control" })
+		@Html.ValidationMessageFor(x=>x.name)
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(x => x.description, new { @class = "text-capitalize" })
+		@Html.TextAreaFor(x => x.description, new { @class = "form-control" })
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(x => x.dateCreated)
+		@Html.DisplayFor(x => x.dateCreated, "{0:d MMM yyyy}", new { @class = "form-control" })
+	</div>
+
+
+	@Html.HiddenFor(x => x.id)
+	<button type="submit" class="btn btn-primary">Save</button>
+	if(!newEntry){<button type ="button" id="deleteBtn" class="btn btn-secondary">Delete</button>}
+		
+}
+
+@section scripts
+{
+	<script>
+		$(document).ready(function () {
+			$("#deleteBtn").on("click", function () {
+				var button = $(this);
+				var id = $('#@Html.IdFor(x=>x.id)').val();
+				if (confirm("Delete skill?")) {
+					console.log("CONFIRMED");
+					$.ajax({
+						url: "/api/skills/" + id,
+						method: "DELETE",
+						success: function () {
+							window.location.href = "/skills/index";
+						}
+					});
+				}
+
+
+			});
+		});
+
+	</script>
+}
+
