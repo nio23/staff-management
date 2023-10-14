@@ -1,4 +1,4 @@
-#An ASP.NET project build with MVC architectural design pattern.
+# An ASP.NET project build with MVC architectural design pattern.
 
 API implementation that supports the follow actions:
 - Create
@@ -8,7 +8,7 @@ API implementation that supports the follow actions:
   
 CRUD on both employee and skill entities.
 
-##Frameworks and libraries used
+## Frameworks and libraries used
 **Frameworks**
 - ASP.NET
 - Entity Framework
@@ -18,6 +18,6 @@ CRUD on both employee and skill entities.
 - jQuery
 - AutoMapper
 
-##About
+## About
 Application is about a company that tag each employee base on his soft skills.
 You can add as many skills you wish to an employee(many to many relationship).
